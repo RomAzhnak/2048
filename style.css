@@ -1,0 +1,32 @@
+#tabl {
+  /* border-collapse: collapse; */
+  margin: 150px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 48px;
+  color: white;
+  }
+
+  td {
+  width: 110px;
+  height: 110px;
+  border: 10px solid rgb(150, 150, 150);
+  /* padding: 3px 5px; */
+  /* font-size: 36px; */
+  background: rgb(180, 180, 180);
+  text-align: center;
+  vertical-align: middle;
+  /* overflow: hidden;
+  border-radius: 25px; */
+  transition: 0.5s;
+  }
+
+  /* td:hover {
+    
+} */
+
+.alert {
+  color: #3c763d;
+  /* background-color: #d5e6a2; */
+}
