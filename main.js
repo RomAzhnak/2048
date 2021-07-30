@@ -91,7 +91,7 @@ function recalculationMatrix() {
       maxScore = Math.max(...arrayTemp) > maxScore ? Math.max(...arrayTemp) : maxScore;
     }
   }
-  isEndGame = (maxScore == 8) ? true : false;
+  isEndGame = (maxScore == 2048) ? true : false;
 };
 
 function reverseMatrix() {
