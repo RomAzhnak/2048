@@ -3,18 +3,20 @@
 // <div show-info="name"></div>
 // document.querySelectorAll('[show-info]')
 
-// const tableMatrix = document.getElementById("tabl")
+const score = document.getElementById("score");
 const tableMatrix = document.querySelector('table');
+let totalScore = 0;
+let maxScore = 0;
+let isEndGame = false;
 let isRefresh = false;
-let baseMatrix = [[1024, 2, null, 4],
-[64, null, 32, 8],
-[null, 16, 512, 128],
-[null, null, null, 2028]];
+let baseMatrix = [[null, null, null, null],
+                  [null, null, null, null],
+                  [null, null, null, null],
+                  [null, null, null, null]];
 
-//транспонируем матрицу
 function transposeMatrix() {
-  const transpose = matrix => matrix[0].map((col, i) => matrix.map(row => row[i]));   // транспонирование матрицы
-// array[0].map((col, i) => array.map(row => row[i]));
+  const transpose = matrix => matrix[0].map((col, i) => matrix.map(row => row[i]));
+  // array[0].map((col, i) => array.map(row => row[i]));
   baseMatrix = transpose(baseMatrix);
 };
 
@@ -29,10 +31,8 @@ function randomNumber() {
   randomNumber();
 };
 
-// удаляем пустоты между числами и прижимаем влево
 // let tmp = Array(4).fill(0);
 function removeSpacesBetweenNumbers() {
-  isRefresh = false;
   for (let k = 0; k < baseMatrix.length; k++) {
     let arrayTemp = baseMatrix[k];
     let j = -1;
@@ -53,17 +53,18 @@ function removeSpacesBetweenNumbers() {
 };
 
 function redrawTable() {
+  let numberFontSize = getComputedStyle(tableMatrix);
   for (let i = 0; i < tableMatrix.rows.length; i++) {
     let row = tableMatrix.rows[i];
+    numberFontSize = parseInt(numberFontSize.fontSize);
     for (let j = 0; j < row.cells.length; j++) {
       row.cells[j].innerHTML = baseMatrix[i][j];
       if (baseMatrix[i][j]) {
         let ratio = Math.log2(baseMatrix[i][j])
         row.cells[j].style.backgroundColor = `rgba(235, ${ratio * 25}, ${ratio * 5}, 0.8)`;
-        row.cells[j].style.fontSize = `${64 - 2 * ratio}px`;
+        row.cells[j].style.fontSize = `${numberFontSize - 2 * ratio}px`;
         // row.cells[j].style.cssText = `color: white; font-size: ${48-2*i-2*j}px; background-color:rgb(245, ${j*70}, ${i*10})`;
       } else {
-        // row.cells[j].innerHTML = "";
         row.cells[j].style.backgroundColor = "";
       }
     }
@@ -79,38 +80,114 @@ function recalculationMatrix() {
       }
       if (arrayTemp[i] == arrayTemp[i + 1]) {
         arrayTemp[i] *= 2;
+        totalScore += arrayTemp[i];
         arrayTemp.splice(i + 1, 1);
         arrayTemp.push(...Array(1).fill(null));
         isRefresh = true;
       }
     }
-    baseMatrix[k] = arrayTemp;
+    if (isRefresh) {
+      baseMatrix[k] = arrayTemp;
+      maxScore = Math.max(...arrayTemp) > maxScore ? Math.max(...arrayTemp) : maxScore;
+    }
   }
+  isEndGame = (maxScore == 8) ? true : false;
 };
 
 function reverseMatrix() {
-    for (let k = 0; k < baseMatrix.length; k++) {
-      baseMatrix[k].reverse();
+  for (let k = 0; k < baseMatrix.length; k++) {
+    baseMatrix[k].reverse();
   }
 };
 
-baseMatrix = [[2,    2,    4,    4],
-              [64,   8,    null, 8],
-              [16,   null, null, 16],
-              [null, null, 512,  512]];
+function moveArrow(event) {
+  event.stopImmediatePropagation();
+  const keyName = event.key;
+  if (!isEndGame) {
+    isRefresh = false;
+    switch (event.key) {
+      case 'ArrowLeft':
+        removeSpacesBetweenNumbers();
+        recalculationMatrix();
+        if (isRefresh) {
+          redrawTable();
+          score.innerHTML = totalScore;
+          if (!isEndGame) {
+          randomNumber();
+          setTimeout(redrawTable, 150);
+          }
+        }
+        break;
+      case 'ArrowRight':
+        reverseMatrix();
+        removeSpacesBetweenNumbers();
+        recalculationMatrix();
+        reverseMatrix();
+        if (isRefresh) {
+          redrawTable();
+          score.innerHTML = totalScore;
+          if (!isEndGame) {
+          randomNumber();
+          setTimeout(redrawTable, 150);
+          }
+        }
+        break;
+      case 'ArrowUp':
+        transposeMatrix();
+        removeSpacesBetweenNumbers();
+        recalculationMatrix();
+        transposeMatrix();
+        if (isRefresh) {
+          redrawTable();
+          score.innerHTML = totalScore;
+          if (!isEndGame) {
+          randomNumber();
+          setTimeout(redrawTable, 150);
+          }
+        }
+        break;
+      case 'ArrowDown':
+        transposeMatrix();
+        reverseMatrix();
+        removeSpacesBetweenNumbers();
+        recalculationMatrix();
+        reverseMatrix();
+        transposeMatrix();
+        if (isRefresh) {
+          redrawTable();
+          score.innerHTML = totalScore;
+          if (!isEndGame) {
+          randomNumber();
+          setTimeout(redrawTable, 150);
+          }
+        }
+        break;
+    }
+  } else {
+    alert("Ты выиграл");
+  }
+};
 
-// removeSpacesBetweenNumbers();
-// recalculationMatrix();
-// reverseMatrix();
-transposeMatrix();
-redrawTable();
+function startGame() {
+  maxScore = 0;
+  isRefresh = false;
+  isEndGame = false;
+  totalScore = 0;
+  score.innerHTML = totalScore;  
+  baseMatrix = [[null, null, null, null],
+                  [null, null, null, null],
+                  [null, null, null, null],
+                  [null, null, null, null]];
+  randomNumber();
+  randomNumber();
+  redrawTable();
 
-// baseMatrix = transpose(baseMatrix);
-/* redrawTable();
-removeSpacesBetweenNumbers();
-redrawTable();
-randomNumber();
-redrawTable(); */
-// setTimeout(redrawTable, 2000);
-// setTimeout(randomNumber, 3000);
-// setTimeout(redrawTable, 4000);
+  // const score = document.getElementById("score");
+  // const tableMatrix = document.querySelector('table');
+}
+
+
+window.addEventListener('resize', redrawTable, false);
+document.addEventListener('keydown', moveArrow, false);
+document.addEventListener('keydown', moveArrow, true);
+startGame();

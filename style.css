@@ -1,32 +1,66 @@
+.wrapper-scoreboard {
+  margin: 50px auto;
+  width: 450px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 24px;
+}
+
+.scoreboard {
+  padding: 10px;
+  width: 150px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(150, 150, 150);
+}
+
+#score {
+  font-size: 150%;
+  font-weight: bold;
+}
+
 #tabl {
   /* border-collapse: collapse; */
-  margin: 150px auto;
+  margin: auto;
   overflow: hidden;
   border-radius: 10px;
   font-weight: bold;
-  font-size: 48px;
+  font-size: 68px;
   color: white;
+  table-layout: fixed;
   }
 
-  td {
+td {
   width: 110px;
   height: 110px;
   border: 10px solid rgb(150, 150, 150);
-  /* padding: 3px 5px; */
   /* font-size: 36px; */
   background: rgb(180, 180, 180);
   text-align: center;
   vertical-align: middle;
-  /* overflow: hidden;
-  border-radius: 25px; */
-  transition: 0.5s;
+  transition: 0.3s;
+}
+
+@media (max-width: 1279px) {
+  .wrapper-scoreboard {
+    font-size: 16px;
+    width: 285px;
   }
 
-  /* td:hover {
-    
-} */
+  td {
+    width: 70px;
+    height: 70px;
+  }
 
-.alert {
-  color: #3c763d;
-  /* background-color: #d5e6a2; */
+  .scoreboard {
+    width: 110px;
+    padding: 5px;
+  }
+
+  #tabl {
+    font-size: 48px;
+  }
 }
