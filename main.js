@@ -189,5 +189,4 @@ function startGame() {
 
 window.addEventListener('resize', redrawTable, false);
 document.addEventListener('keydown', moveArrow, false);
-document.addEventListener('keydown', moveArrow, true);
 startGame();
