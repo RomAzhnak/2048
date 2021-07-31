@@ -5,6 +5,7 @@
 
 const score = document.getElementById("score");
 const tableMatrix = document.querySelector('table');
+// const tableMatrix = document.getElementById('tabl');
 let totalScore = 0;
 let maxScore = 0;
 let isEndGame = false;
@@ -31,7 +32,6 @@ function randomNumber() {
   randomNumber();
 };
 
-// let tmp = Array(4).fill(0);
 function removeSpacesBetweenNumbers() {
   for (let k = 0; k < baseMatrix.length; k++) {
     let arrayTemp = baseMatrix[k];
@@ -53,16 +53,15 @@ function removeSpacesBetweenNumbers() {
 };
 
 function redrawTable() {
-  let numberFontSize = getComputedStyle(tableMatrix);
+  let numberFontSize = parseInt(getComputedStyle(tableMatrix).fontSize);
   for (let i = 0; i < tableMatrix.rows.length; i++) {
     let row = tableMatrix.rows[i];
-    numberFontSize = parseInt(numberFontSize.fontSize);
     for (let j = 0; j < row.cells.length; j++) {
       row.cells[j].innerHTML = baseMatrix[i][j];
       if (baseMatrix[i][j]) {
-        let ratio = Math.log2(baseMatrix[i][j])
+        let ratio = Math.log2(baseMatrix[i][j]);
         row.cells[j].style.backgroundColor = `rgba(235, ${ratio * 25}, ${ratio * 5}, 0.8)`;
-        row.cells[j].style.fontSize = `${numberFontSize - 2 * ratio}px`;
+        row.cells[j].style.fontSize = `${numberFontSize - 2.5 * ratio}px`;
         // row.cells[j].style.cssText = `color: white; font-size: ${48-2*i-2*j}px; background-color:rgb(245, ${j*70}, ${i*10})`;
       } else {
         row.cells[j].style.backgroundColor = "";
@@ -100,8 +99,20 @@ function reverseMatrix() {
   }
 };
 
+function showNotification(text) {
+  let notification = tableMatrix.querySelector('div');
+  if (notification) {
+    notification.remove();
+  }
+  notification = document.createElement('div');
+  notification.className = "notification";
+  notification.innerHTML = text;
+  tabl.prepend(notification);
+  // setTimeout(() => notification.remove(), 1500);
+}
+
 function moveArrow(event) {
-  event.stopImmediatePropagation();
+  event.preventDefault();
   const keyName = event.key;
   if (!isEndGame) {
     isRefresh = false;
@@ -115,6 +126,8 @@ function moveArrow(event) {
           if (!isEndGame) {
           randomNumber();
           setTimeout(redrawTable, 150);
+          } else {
+            showNotification("Ты выиграл");
           }
         }
         break;
@@ -129,6 +142,8 @@ function moveArrow(event) {
           if (!isEndGame) {
           randomNumber();
           setTimeout(redrawTable, 150);
+          }else {
+            showNotification("Ты выиграл");
           }
         }
         break;
@@ -143,6 +158,8 @@ function moveArrow(event) {
           if (!isEndGame) {
           randomNumber();
           setTimeout(redrawTable, 150);
+          } else {
+            showNotification("Ты выиграл");
           }
         }
         break;
@@ -159,12 +176,14 @@ function moveArrow(event) {
           if (!isEndGame) {
           randomNumber();
           setTimeout(redrawTable, 150);
+          } else {
+            showNotification("Ты выиграл");
           }
         }
         break;
     }
   } else {
-    alert("Ты выиграл");
+    // showNotification("Ты выиграл");
   }
 };
 
@@ -178,14 +197,14 @@ function startGame() {
                   [null, null, null, null],
                   [null, null, null, null],
                   [null, null, null, null]];
+  let notification = tabl.querySelector('div');
+  if (notification) {
+    notification.remove();
+  } 
   randomNumber();
   randomNumber();
   redrawTable();
-
-  // const score = document.getElementById("score");
-  // const tableMatrix = document.querySelector('table');
 }
-
 
 window.addEventListener('resize', redrawTable, false);
 document.addEventListener('keydown', moveArrow, false);

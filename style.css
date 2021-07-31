@@ -1,6 +1,6 @@
 .wrapper-scoreboard {
   margin: 50px auto;
-  width: 450px;
+  width: 445px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +23,6 @@
 }
 
 #tabl {
-  /* border-collapse: collapse; */
   margin: auto;
   overflow: hidden;
   border-radius: 10px;
@@ -31,13 +30,24 @@
   font-size: 68px;
   color: white;
   table-layout: fixed;
+  position: relative;
+  }
+
+  .notification {
+    position: fixed;
+    font-size: 80%;
+    padding-top: 50px;
+    left: auto;
+    width: 440px;
+    height: 450px;
+    text-align: center;
+    background-color: rgba(150, 150, 150, 0.8);
   }
 
 td {
   width: 110px;
   height: 110px;
   border: 10px solid rgb(150, 150, 150);
-  /* font-size: 36px; */
   background: rgb(180, 180, 180);
   text-align: center;
   vertical-align: middle;
@@ -47,12 +57,13 @@ td {
 @media (max-width: 1279px) {
   .wrapper-scoreboard {
     font-size: 16px;
-    width: 285px;
+    width: 280px;
   }
 
   td {
     width: 70px;
     height: 70px;
+    border: 5px solid rgb(150, 150, 150);;
   }
 
   .scoreboard {
@@ -62,5 +73,12 @@ td {
 
   #tabl {
     font-size: 48px;
+  }
+
+  .notification {
+    left: auto;
+    padding-top: 30px;
+    width: 280px;
+    height: 285px;
   }
 }
