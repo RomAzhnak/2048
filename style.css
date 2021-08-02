@@ -1,6 +1,6 @@
 .wrapper-scoreboard {
   margin: 50px auto;
-  width: 445px;
+  width: 440px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,20 +29,18 @@
   font-weight: bold;
   font-size: 68px;
   color: white;
-  table-layout: fixed;
   position: relative;
   }
 
-  .notification {
-    position: fixed;
-    font-size: 80%;
-    padding-top: 50px;
-    left: auto;
-    width: 440px;
-    height: 450px;
-    text-align: center;
-    background-color: rgba(150, 150, 150, 0.8);
-  }
+.notification {
+  position: absolute;
+  font-size: 80%;
+  padding-top: 50px;
+  width: 440px;
+  height: 440px;
+  text-align: center;
+  background-color: rgba(150, 150, 150, 0.8);
+}
 
 td {
   width: 110px;
@@ -76,9 +74,8 @@ td {
   }
 
   .notification {
-    left: auto;
     padding-top: 30px;
     width: 280px;
-    height: 285px;
+    height: 280px;
   }
 }

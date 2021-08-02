@@ -17,7 +17,6 @@ let baseMatrix = [[null, null, null, null],
 
 function transposeMatrix() {
   const transpose = matrix => matrix[0].map((col, i) => matrix.map(row => row[i]));
-  // array[0].map((col, i) => array.map(row => row[i]));
   baseMatrix = transpose(baseMatrix);
 };
 
@@ -33,22 +32,22 @@ function randomNumber() {
 };
 
 function removeSpacesBetweenNumbers() {
-  for (let k = 0; k < baseMatrix.length; k++) {
-    let arrayTemp = baseMatrix[k];
+  for (let row = 0; row < baseMatrix.length; row++) {
+    let rowMatrix = baseMatrix[row];
     let j = -1;
-    for (let i = 0; i < arrayTemp.length; i++) {
-      if ((arrayTemp[i]) && (i > j + 1)) {
+    for (let i = 0; i < rowMatrix.length; i++) {
+      if ((rowMatrix[i]) && (i > j + 1)) {
         j++;
-        arrayTemp.splice(j, i - j);
-        arrayTemp.push(...Array(i - j).fill(null));
+        rowMatrix.splice(j, i - j);
+        rowMatrix.push(...Array(i - j).fill(null));
         isRefresh = true;
         i = j;
       }
-      if (arrayTemp[i]) {
+      if (rowMatrix[i]) {
         j = i;
       }
     }
-    baseMatrix[k] = arrayTemp;
+    baseMatrix[row] = rowMatrix;
   }
 };
 
@@ -71,31 +70,31 @@ function redrawTable() {
 };
 
 function recalculationMatrix() {
-  for (let k = 0; k < baseMatrix.length; k++) {
-    let arrayTemp = baseMatrix[k];
-    for (let i = 0; i < arrayTemp.length; i++) {
-      if (!arrayTemp[i]) {
+  for (let row = 0; row < baseMatrix.length; row++) {
+    let rowMatrix = baseMatrix[row];
+    for (let i = 0; i < rowMatrix.length; i++) {
+      if (!rowMatrix[i]) {
         break;
       }
-      if (arrayTemp[i] == arrayTemp[i + 1]) {
-        arrayTemp[i] *= 2;
-        totalScore += arrayTemp[i];
-        arrayTemp.splice(i + 1, 1);
-        arrayTemp.push(...Array(1).fill(null));
+      if (rowMatrix[i] == rowMatrix[i + 1]) {
+        rowMatrix[i] *= 2;
+        totalScore += rowMatrix[i];
+        rowMatrix.splice(i + 1, 1);
+        rowMatrix.push(...Array(1).fill(null));
         isRefresh = true;
       }
     }
     if (isRefresh) {
-      baseMatrix[k] = arrayTemp;
-      maxScore = Math.max(...arrayTemp) > maxScore ? Math.max(...arrayTemp) : maxScore;
+      baseMatrix[row] = rowMatrix;
+      maxScore = Math.max(...rowMatrix) > maxScore ? Math.max(...rowMatrix) : maxScore;
     }
   }
   isEndGame = (maxScore == 2048) ? true : false;
 };
 
 function reverseMatrix() {
-  for (let k = 0; k < baseMatrix.length; k++) {
-    baseMatrix[k].reverse();
+  for (let row = 0; row < baseMatrix.length; row++) {
+    baseMatrix[row].reverse();
   }
 };
 
@@ -108,8 +107,18 @@ function showNotification(text) {
   notification.className = "notification";
   notification.innerHTML = text;
   tabl.prepend(notification);
-  // setTimeout(() => notification.remove(), 1500);
 }
+
+function updateMatrix() {
+  redrawTable();
+  score.innerHTML = totalScore;
+  if (!isEndGame) {
+  randomNumber();
+  setTimeout(redrawTable, 150);
+  } else {
+    showNotification("Ты выиграл");
+  }
+};
 
 function moveArrow(event) {
   event.preventDefault();
@@ -121,14 +130,7 @@ function moveArrow(event) {
         removeSpacesBetweenNumbers();
         recalculationMatrix();
         if (isRefresh) {
-          redrawTable();
-          score.innerHTML = totalScore;
-          if (!isEndGame) {
-          randomNumber();
-          setTimeout(redrawTable, 150);
-          } else {
-            showNotification("Ты выиграл");
-          }
+          updateMatrix();
         }
         break;
       case 'ArrowRight':
@@ -137,14 +139,7 @@ function moveArrow(event) {
         recalculationMatrix();
         reverseMatrix();
         if (isRefresh) {
-          redrawTable();
-          score.innerHTML = totalScore;
-          if (!isEndGame) {
-          randomNumber();
-          setTimeout(redrawTable, 150);
-          }else {
-            showNotification("Ты выиграл");
-          }
+          updateMatrix();
         }
         break;
       case 'ArrowUp':
@@ -153,14 +148,7 @@ function moveArrow(event) {
         recalculationMatrix();
         transposeMatrix();
         if (isRefresh) {
-          redrawTable();
-          score.innerHTML = totalScore;
-          if (!isEndGame) {
-          randomNumber();
-          setTimeout(redrawTable, 150);
-          } else {
-            showNotification("Ты выиграл");
-          }
+          updateMatrix();
         }
         break;
       case 'ArrowDown':
@@ -171,19 +159,10 @@ function moveArrow(event) {
         reverseMatrix();
         transposeMatrix();
         if (isRefresh) {
-          redrawTable();
-          score.innerHTML = totalScore;
-          if (!isEndGame) {
-          randomNumber();
-          setTimeout(redrawTable, 150);
-          } else {
-            showNotification("Ты выиграл");
-          }
+          updateMatrix();
         }
         break;
     }
-  } else {
-    // showNotification("Ты выиграл");
   }
 };
 
@@ -206,6 +185,7 @@ function startGame() {
   redrawTable();
 }
 
-window.addEventListener('resize', redrawTable, false);
-document.addEventListener('keydown', moveArrow, false);
+window.addEventListener('resize', redrawTable);
+document.addEventListener('keydown', moveArrow);
+restartButton.addEventListener('click', startGame);
 startGame();
