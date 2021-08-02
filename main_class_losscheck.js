@@ -175,7 +175,16 @@ class MoveArrow {
 
   lossCheck() {
     if (this.totalOccupiedCells!=16) return;
-    
+    this.isRefresh = false;
+    let tempMatrix = JSON.parse(JSON.stringify(this.baseMatrix));
+    this.arrowLeft();
+    this.arrowUp();
+    if (this.isRefresh) {
+        this.isRefresh = false;
+        this.baseMatrix = JSON.parse(JSON.stringify(tempMatrix));
+        return;
+    }
+    this.showNotification("Вы проиграли");    
   }
 
   updateMatrix() {
@@ -189,10 +198,9 @@ class MoveArrow {
       // setTimeout(() => this.redrawTable(), 150);
       // delay(1000).then(boundRedrawTable);
       delay(150).then(() => this.redrawTable())
-                .then(() => this.lossCheck()) ;
-
+                .then(() => this.lossCheck());
     } else {
-      this.showNotification("Ты выиграл");
+      this.showNotification("Вы выиграли");
     }
   }
 
@@ -204,9 +212,9 @@ class MoveArrow {
     this.totalScore = 0;
     score.innerHTML = this.totalScore;  
     this.baseMatrix = [[null, null, null, null],
-                    [null, null, null, null],
-                    [null, null, null, null],
-                    [null, null, null, null]];
+                       [null, null, null, null],
+                       [null, null, null, null],
+                       [null, null, null, null]];
     let notification = tabl.querySelector('div');
     if (notification) {
       notification.remove();
